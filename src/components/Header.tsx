@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
               <img 
                 src="/logo.jpg" 
                 alt={siteSettings?.site_name || "Bud's Pizzeria and Coffee"}
-                className="w-10 h-10 rounded-full object-cover ring-2 ring-buds-gold"
+                className="w-10 h-10 rounded-full object-cover"
                 onError={(e) => {
                   e.currentTarget.src = "/logo.jpg";
                 }}
