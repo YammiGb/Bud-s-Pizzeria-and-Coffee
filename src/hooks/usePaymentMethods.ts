@@ -112,13 +112,22 @@ export const usePaymentMethods = () => {
 
   const deletePaymentMethod = async (id: string) => {
     try {
-      const { error: deleteError } = await supabase
+      console.log('Attempting to delete payment method with id:', id);
+      
+      const { data, error: deleteError } = await supabase
         .from('payment_methods')
         .delete()
-        .eq('id', id);
+        .eq('id', id)
+        .select();
 
-      if (deleteError) throw deleteError;
+      console.log('Delete response:', { data, deleteError });
 
+      if (deleteError) {
+        console.error('Delete error details:', deleteError);
+        throw deleteError;
+      }
+
+      console.log('Payment method deleted successfully, refetching...');
       await fetchAllPaymentMethods();
     } catch (err) {
       console.error('Error deleting payment method:', err);

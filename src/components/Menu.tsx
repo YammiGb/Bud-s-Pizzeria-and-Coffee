@@ -2,7 +2,6 @@ import React from 'react';
 import { MenuItem, CartItem } from '../types';
 import { useCategories } from '../hooks/useCategories';
 import MenuItemCard from './MenuItemCard';
-import MobileNav from './MobileNav';
 
 // Preload images for better performance
 const preloadImages = (items: MenuItem[]) => {
@@ -24,6 +23,7 @@ interface MenuProps {
 const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems, updateQuantity }) => {
   const { categories } = useCategories();
   const [activeCategory, setActiveCategory] = React.useState('hot-coffee');
+
 
   // Preload images when menu items change
   React.useEffect(() => {
@@ -87,16 +87,12 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems, updateQuan
 
   return (
     <>
-      <MobileNav 
-        activeCategory={activeCategory}
-        onCategoryClick={handleCategoryClick}
-      />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="text-center mb-12">
-        <h2 className="text-4xl font-noto font-semibold text-black mb-4">Our Menu</h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Discover our selection of authentic dim sum, flavorful noodles, and traditional Asian dishes, 
-          all prepared with fresh ingredients and authentic techniques.
+        <h2 className="text-4xl font-playfair font-semibold text-buds-charcoal mb-4">Our Menu</h2>
+        <p className="text-buds-gray max-w-2xl mx-auto">
+          Discover our selection of authentic Italian pizzas, artisanal coffee, and fresh ingredients, 
+          all prepared with traditional techniques and passion.
         </p>
       </div>
 
@@ -109,16 +105,18 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems, updateQuan
           <section key={category.id} id={category.id} className="mb-16">
             <div className="flex items-center mb-8">
               <span className="text-3xl mr-3">{category.icon}</span>
-              <h3 className="text-3xl font-noto font-medium text-black">{category.name}</h3>
+              <h3 className="text-3xl font-playfair font-medium text-buds-charcoal">{category.name}</h3>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {categoryItems.map((item) => {
                 const cartItem = cartItems.find(cartItem => cartItem.id === item.id);
+                const categoryData = categories.find(cat => cat.id === category.id);
                 return (
                   <MenuItemCard
                     key={item.id}
                     item={item}
+                    categoryIcon={categoryData?.icon || '🍕'}
                     onAddToCart={addToCart}
                     quantity={cartItem?.quantity || 0}
                     onUpdateQuantity={updateQuantity}

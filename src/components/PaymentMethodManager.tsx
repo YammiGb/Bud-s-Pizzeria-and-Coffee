@@ -56,8 +56,11 @@ const PaymentMethodManager: React.FC<PaymentMethodManagerProps> = ({ onBack }) =
   const handleDeleteMethod = async (id: string) => {
     if (confirm('Are you sure you want to delete this payment method?')) {
       try {
+        console.log('Deleting payment method:', id);
         await deletePaymentMethod(id);
+        console.log('Payment method deleted successfully');
       } catch (error) {
+        console.error('Delete error:', error);
         alert(error instanceof Error ? error.message : 'Failed to delete payment method');
       }
     }

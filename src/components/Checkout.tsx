@@ -14,14 +14,11 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
   const [step, setStep] = useState<'details' | 'payment'>('details');
   const [customerName, setCustomerName] = useState('');
   const [contactNumber, setContactNumber] = useState('');
-  const [serviceType, setServiceType] = useState<ServiceType>('dine-in');
+  const [serviceType, setServiceType] = useState<ServiceType>('pickup');
   const [address, setAddress] = useState('');
   const [landmark, setLandmark] = useState('');
   const [pickupTime, setPickupTime] = useState('5-10');
   const [customTime, setCustomTime] = useState('');
-  // Dine-in specific state
-  const [partySize, setPartySize] = useState(1);
-  const [dineInTime, setDineInTime] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('gcash');
   const [referenceNumber, setReferenceNumber] = useState('');
   const [notes, setNotes] = useState('');
@@ -48,26 +45,15 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
       ? (pickupTime === 'custom' ? customTime : `${pickupTime} minutes`)
       : '';
     
-    const dineInInfo = serviceType === 'dine-in' 
-      ? `👥 Party Size: ${partySize} person${partySize !== 1 ? 's' : ''}\n🕐 Preferred Time: ${new Date(dineInTime).toLocaleString('en-US', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric', 
-          hour: '2-digit', 
-          minute: '2-digit' 
-        })}`
-      : '';
     
     const orderDetails = `
-🛒 ClickEats ORDER
+🍕 Bud's Pizzeria and Coffee ORDER
 
 👤 Customer: ${customerName}
 📞 Contact: ${contactNumber}
 📍 Service: ${serviceType.charAt(0).toUpperCase() + serviceType.slice(1)}
 ${serviceType === 'delivery' ? `🏠 Address: ${address}${landmark ? `\n🗺️ Landmark: ${landmark}` : ''}` : ''}
 ${serviceType === 'pickup' ? `⏰ Pickup Time: ${timeInfo}` : ''}
-${serviceType === 'dine-in' ? dineInInfo : ''}
 
 
 📋 ORDER DETAILS:
@@ -95,11 +81,11 @@ ${serviceType === 'delivery' ? `🛵 DELIVERY FEE:` : ''}
 
 ${notes ? `📝 Notes: ${notes}` : ''}
 
-Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
+Please confirm this order to proceed. Thank you for choosing Bud's Pizzeria and Coffee! 🍕
     `.trim();
 
     const encodedMessage = encodeURIComponent(orderDetails);
-    const messengerUrl = `https://m.me/61579693577478?text=${encodedMessage}`;
+    const messengerUrl = `https://m.me/Budspizzeriandcoffee?text=${encodedMessage}`;
     
     window.open(messengerUrl, '_blank');
     
@@ -107,8 +93,7 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
 
   const isDetailsValid = customerName && contactNumber && 
     (serviceType !== 'delivery' || address) && 
-    (serviceType !== 'pickup' || (pickupTime !== 'custom' || customTime)) &&
-    (serviceType !== 'dine-in' || (partySize > 0 && dineInTime));
+    (serviceType !== 'pickup' || (pickupTime !== 'custom' || customTime));
 
   if (step === 'details') {
     return (
@@ -116,50 +101,50 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
         <div className="flex items-center mb-8">
           <button
             onClick={onBack}
-            className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors duration-200"
+            className="flex items-center space-x-2 text-buds-gray hover:text-buds-charcoal transition-colors duration-200"
           >
             <ArrowLeft className="h-5 w-5" />
             <span>Back to Cart</span>
           </button>
-          <h1 className="text-3xl font-noto font-semibold text-black ml-8">Order Details</h1>
+          <h1 className="text-3xl font-playfair font-semibold text-buds-charcoal ml-8">Order Details</h1>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Order Summary */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-2xl font-noto font-medium text-black mb-6">Order Summary</h2>
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-buds-beige">
+            <h2 className="text-2xl font-playfair font-medium text-buds-charcoal mb-6">Order Summary</h2>
             
             <div className="space-y-4 mb-6">
               {cartItems.map((item) => (
-                <div key={item.id} className="flex items-center justify-between py-2 border-b border-red-100">
+                <div key={item.id} className="flex items-center justify-between py-2 border-b border-buds-cream">
                   <div>
-                    <h4 className="font-medium text-black">{item.name}</h4>
+                    <h4 className="font-medium text-buds-charcoal">{item.name}</h4>
                     {item.selectedVariation && (
-                      <p className="text-sm text-gray-600">Size: {item.selectedVariation.name}</p>
+                      <p className="text-sm text-buds-gray">Size: {item.selectedVariation.name}</p>
                     )}
                     {item.selectedAddOns && item.selectedAddOns.length > 0 && (
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-buds-gray">
                         Add-ons: {item.selectedAddOns.map(addOn => addOn.name).join(', ')}
                       </p>
                     )}
-                    <p className="text-sm text-gray-600">₱{item.totalPrice} x {item.quantity}</p>
+                    <p className="text-sm text-buds-gray">₱{item.totalPrice} x {item.quantity}</p>
                   </div>
-                  <span className="font-semibold text-black">₱{item.totalPrice * item.quantity}</span>
+                  <span className="font-semibold text-buds-charcoal">₱{item.totalPrice * item.quantity}</span>
                 </div>
               ))}
             </div>
             
-            <div className="border-t border-red-200 pt-4">
-              <div className="flex items-center justify-between text-2xl font-noto font-semibold text-black">
+            <div className="border-t border-buds-cream pt-4">
+              <div className="flex items-center justify-between text-2xl font-playfair font-semibold text-buds-charcoal">
                 <span>Total:</span>
-                <span>₱{totalPrice}</span>
+                <span className="text-buds-red">₱{totalPrice}</span>
               </div>
             </div>
           </div>
 
           {/* Customer Details Form */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-2xl font-noto font-medium text-black mb-6">Customer Information</h2>
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-buds-beige">
+            <h2 className="text-2xl font-playfair font-medium text-buds-charcoal mb-6">Customer Information</h2>
             
             <form className="space-y-6">
               {/* Customer Information */}
@@ -190,9 +175,8 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
               {/* Service Type */}
               <div>
                 <label className="block text-sm font-medium text-black mb-3">Service Type *</label>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   {[
-                    { value: 'dine-in', label: 'Dine In', icon: '🪑' },
                     { value: 'pickup', label: 'Pickup', icon: '🚶' },
                     { value: 'delivery', label: 'Delivery', icon: '🛵' }
                   ].map((option) => (
@@ -213,44 +197,6 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                 </div>
               </div>
 
-              {/* Dine-in Details */}
-              {serviceType === 'dine-in' && (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium text-black mb-2">Party Size *</label>
-                    <div className="flex items-center space-x-4">
-                      <button
-                        type="button"
-                        onClick={() => setPartySize(Math.max(1, partySize - 1))}
-                        className="w-10 h-10 rounded-lg border-2 border-red-300 flex items-center justify-center text-red-600 hover:border-red-400 hover:bg-red-50 transition-all duration-200"
-                      >
-                        -
-                      </button>
-                      <span className="text-2xl font-semibold text-black min-w-[3rem] text-center">{partySize}</span>
-                      <button
-                        type="button"
-                        onClick={() => setPartySize(Math.min(20, partySize + 1))}
-                        className="w-10 h-10 rounded-lg border-2 border-red-300 flex items-center justify-center text-red-600 hover:border-red-400 hover:bg-red-50 transition-all duration-200"
-                      >
-                        +
-                      </button>
-                      <span className="text-sm text-gray-600 ml-2">person{partySize !== 1 ? 's' : ''}</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-black mb-2">Preferred Time *</label>
-                    <input
-                      type="datetime-local"
-                      value={dineInTime}
-                      onChange={(e) => setDineInTime(e.target.value)}
-                      className="w-full px-4 py-3 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
-                      required
-                    />
-                    <p className="text-xs text-gray-500 mt-1">Please select your preferred dining time</p>
-                  </div>
-                </>
-              )}
 
               {/* Pickup Time Selection */}
               {serviceType === 'pickup' && (
@@ -358,18 +304,18 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
       <div className="flex items-center mb-8">
         <button
           onClick={() => setStep('details')}
-          className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors duration-200"
+          className="flex items-center space-x-2 text-buds-gray hover:text-buds-charcoal transition-colors duration-200"
         >
           <ArrowLeft className="h-5 w-5" />
           <span>Back to Details</span>
         </button>
-        <h1 className="text-3xl font-noto font-semibold text-black ml-8">Payment</h1>
+        <h1 className="text-3xl font-playfair font-semibold text-buds-charcoal ml-8">Payment</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Payment Method Selection */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-2xl font-noto font-medium text-black mb-6">Choose Payment Method</h2>
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-buds-beige">
+          <h2 className="text-2xl font-playfair font-medium text-buds-charcoal mb-6">Choose Payment Method</h2>
           
           <div className="grid grid-cols-1 gap-4 mb-6">
             {paymentMethods.map((method) => (
@@ -379,8 +325,8 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                 onClick={() => setPaymentMethod(method.id as PaymentMethod)}
                 className={`p-4 rounded-lg border-2 transition-all duration-200 flex items-center space-x-3 ${
                   paymentMethod === method.id
-                    ? 'border-red-600 bg-red-600 text-white'
-                    : 'border-red-300 bg-white text-gray-700 hover:border-red-400'
+                    ? 'border-buds-red bg-buds-red text-white'
+                    : 'border-buds-beige bg-white text-buds-gray hover:border-buds-red'
                 }`}
               >
                 <span className="text-2xl">💳</span>
@@ -444,23 +390,6 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                 <p className="text-sm text-gray-600">
                   Pickup Time: {pickupTime === 'custom' ? customTime : `${pickupTime} minutes`}
                 </p>
-              )}
-              {serviceType === 'dine-in' && (
-                <>
-                  <p className="text-sm text-gray-600">
-                    Party Size: {partySize} person{partySize !== 1 ? 's' : ''}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Preferred Time: {dineInTime ? new Date(dineInTime).toLocaleString('en-US', { 
-                      weekday: 'long', 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric', 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
-                    }) : 'Not selected'}
-                  </p>
-                </>
               )}
             </div>
 

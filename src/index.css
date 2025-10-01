@@ -2,14 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Ramen Yard Custom Styles */
-/* Minimal helpers for ramen palette when needed outside tailwind tokens */
-.bg-ramen-cream { background-color: #FFF3E0; }
-.bg-ramen-beige { background-color: #F7E7CE; }
-.text-ramen-red { color: #D7263D; }
-.text-ramen-dark { color: #0B0A0A; }
-.border-ramen-sesame { border-color: #D1C7B7; }
-.ring-ramen-gold { --tw-ring-color: #E0A106; }
+/* Bud's Pizzeria Custom Styles */
+/* Minimal helpers for Bud's palette when needed outside tailwind tokens */
+.bg-buds-offWhite { background-color: #FAFAF9; }
+.bg-buds-cream { background-color: #F5F5F4; }
+.bg-buds-beige { background-color: #E7E5E4; }
+.text-buds-red { color: #DC2626; }
+.text-buds-green { color: #16A34A; }
+.text-buds-charcoal { color: #1F2937; }
+.border-buds-red { border-color: #DC2626; }
+.border-buds-green { border-color: #16A34A; }
+.ring-buds-red { --tw-ring-color: #DC2626; }
+.ring-buds-green { --tw-ring-color: #16A34A; }
 
 /* Hide scrollbar for mobile nav */
 .scrollbar-hide {

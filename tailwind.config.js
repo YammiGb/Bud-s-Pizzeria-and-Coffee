@@ -4,21 +4,26 @@ export default {
   theme: {
     extend: {
       colors: {
-        ramen: {
-          red: '#D7263D',
-          dark: '#0B0A0A',
-          charcoal: '#111113',
-          cream: '#FFF3E0',
-          beige: '#F7E7CE',
-          gold: '#E0A106',
-          sesame: '#D1C7B7',
-          seaweed: '#1F2937',
-          kimchi: '#B81D24'
+        buds: {
+          red: '#DC2626', // Primary red for pizza theme
+          redLight: '#EF4444', // Lighter red for accents
+          redDark: '#B91C1C', // Darker red for text
+          green: '#16A34A', // Primary green for herbs/vegetables
+          greenLight: '#22C55E', // Lighter green for accents
+          greenDark: '#15803D', // Darker green for text
+          offWhite: '#FAFAF9', // Off-white background
+          cream: '#F5F5F4', // Slightly darker cream
+          beige: '#E7E5E4', // Light beige for cards
+          gold: '#F59E0B', // Gold for highlights
+          charcoal: '#1F2937', // Dark text
+          gray: '#6B7280' // Medium gray for secondary text
         }
       },
       fontFamily: {
         'pretendard': ['Pretendard', 'system-ui', 'sans-serif'],
-        'noto-kr': ['Noto Serif KR', 'serif']
+        'noto-kr': ['Noto Serif KR', 'serif'],
+        'playfair': ['Playfair Display', 'serif'],
+        'inter': ['Inter', 'system-ui', 'sans-serif']
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',

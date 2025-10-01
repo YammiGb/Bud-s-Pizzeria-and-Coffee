@@ -11,7 +11,7 @@ import SiteSettingsManager from './SiteSettingsManager';
 
 const AdminDashboard: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('beracah_admin_auth') === 'true';
+    return localStorage.getItem('buds_admin_auth') === 'true';
   });
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -232,9 +232,9 @@ const AdminDashboard: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'ClickEats@Admin!2025') {
+    if (password === 'BudsPizzeria@Admin!2025') {
       setIsAuthenticated(true);
-      localStorage.setItem('beracah_admin_auth', 'true');
+      localStorage.setItem('buds_admin_auth', 'true');
       setLoginError('');
     } else {
       setLoginError('Invalid password');
@@ -243,7 +243,7 @@ const AdminDashboard: React.FC = () => {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem('beracah_admin_auth');
+    localStorage.removeItem('buds_admin_auth');
     setPassword('');
     setCurrentView('dashboard');
   };
@@ -934,7 +934,7 @@ const AdminDashboard: React.FC = () => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <Coffee className="h-8 w-8 text-black" />
-              <h1 className="text-2xl font-noto font-semibold text-black">ClickEats Admin</h1>
+              <h1 className="text-2xl font-playfair font-semibold text-buds-charcoal">Bud's Pizzeria Admin</h1>
             </div>
             <div className="flex items-center space-x-4">
               <a
