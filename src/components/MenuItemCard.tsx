@@ -98,12 +98,29 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
       <div className={`bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group animate-scale-in border border-buds-beige ${!item.available ? 'opacity-60' : ''}`}>
         {/* Image Container with Badges */}
         <div className="relative h-48 bg-gradient-to-br from-gray-50 to-gray-100">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-6xl opacity-20 text-buds-gray">{categoryIcon}</div>
-          </div>
+          {item.image ? (
+            <img
+              src={item.image}
+              alt={item.name}
+              className="w-full h-full object-cover"
+              loading="lazy"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-6xl opacity-20 text-buds-gray">{categoryIcon}</div>
+            </div>
+          )}
           
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
+            {item.popular && (
+              <div className="bg-gradient-to-r from-buds-red to-buds-redDark text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                POPULAR
+              </div>
+            )}
             {item.isOnDiscount && item.discountPrice && (
               <div className="bg-gradient-to-r from-buds-red to-buds-redDark text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg animate-pulse">
                 SALE

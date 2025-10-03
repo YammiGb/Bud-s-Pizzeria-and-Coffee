@@ -204,10 +204,11 @@ export const menuData: MenuItem[] = [
 ];
 
 export const categories = [
-  { id: 'dim-sum', name: 'Dim Sum', icon: '🥟' },
-  { id: 'noodles', name: 'Noodles', icon: '🍜' },
-  { id: 'rice-dishes', name: 'Rice Dishes', icon: '🍚' },
-  { id: 'beverages', name: 'Beverages', icon: '🍵' }
+  { id: 'starter', name: 'Starter', icon: '🥗' },
+  { id: 'main-course', name: 'Main Course', icon: '🍝' },
+  { id: 'brick-oven-pizza', name: 'Brick Oven Pizza', icon: '🍕' },
+  { id: 'classic-pizza', name: 'Classic Pizza', icon: '🍕' },
+  { id: 'sodas', name: 'Sodas', icon: '🥤' }
 ];
 
 export const addOnCategories = [

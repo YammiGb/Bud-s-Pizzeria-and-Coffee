@@ -232,103 +232,61 @@ END $$;
 -- Insert default site settings if they don't exist
 INSERT INTO site_settings (id, value, type, description) VALUES
   ('site_name', 'Bud''s Pizzeria and Coffee', 'text', 'The name of the pizzeria'),
-  ('site_logo', 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop', 'image', 'The logo image URL for the site'),
+  ('site_logo', '/logo.jpg', 'image', 'The logo image URL for the site'),
   ('site_description', 'Authentic Italian Pizza & Fresh Coffee', 'text', 'Short description of the pizzeria'),
   ('currency', 'PHP', 'text', 'Currency symbol for prices'),
   ('currency_code', 'PHP', 'text', 'Currency code for payments')
 ON CONFLICT (id) DO NOTHING;
 
--- Update existing categories to Bud's Pizzeria categories
-UPDATE categories SET 
-  name = 'Starter', 
-  icon = '🥗', 
-  sort_order = 1 
-WHERE id = 'hot-coffee';
-
-UPDATE categories SET 
-  name = 'Main Course', 
-  icon = '🍝', 
-  sort_order = 2 
-WHERE id = 'iced-coffee';
-
-UPDATE categories SET 
-  name = 'Brick Oven Pizza', 
-  icon = '🍕', 
-  sort_order = 3 
-WHERE id = 'non-coffee';
-
-UPDATE categories SET 
-  name = 'Classic Pizza', 
-  icon = '🍕', 
-  sort_order = 4 
-WHERE id = 'food';
-
--- Add new category for sodas
-INSERT INTO categories (id, name, icon, sort_order, active) VALUES
-  ('sodas', 'Sodas', '🥤', 5, true)
-ON CONFLICT (id) DO NOTHING;
-
--- Clear existing menu items first
+-- Clear existing menu items first (to avoid foreign key constraint issues)
 DELETE FROM menu_items;
 
--- Add STARTER items (using existing 'hot-coffee' category)
-INSERT INTO menu_items (name, description, base_price, category, popular, available, image_url) VALUES
-  ('Ceasar salad with anchovies', 'Fresh romaine lettuce, parmesan cheese, croutons, and traditional Caesar dressing with anchovies', 205.00, 'hot-coffee', true, true, 'https://images.pexels.com/photos/2097090/pexels-photo-2097090.jpeg?auto=compress&cs=tinysrgb&w=800')
-ON CONFLICT (name, category) DO NOTHING;
+-- Clear existing categories and insert Bud's Pizzeria categories
+DELETE FROM categories;
 
--- Add MAIN COURSE items (using existing 'iced-coffee' category)
-INSERT INTO menu_items (name, description, base_price, category, popular, available, image_url) VALUES
-  ('Shrimp Alfredo Pasta', 'Creamy alfredo sauce with succulent shrimp over perfectly cooked pasta', 398.00, 'iced-coffee', true, true, 'https://images.pexels.com/photos/1435735/pexels-photo-1435735.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Carbonara Pasta', 'Classic Italian carbonara with eggs, cheese, pancetta, and black pepper', 420.00, 'iced-coffee', true, true, 'https://images.pexels.com/photos/1435735/pexels-photo-1435735.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Bolognese Pasta', 'Rich meat sauce with tomatoes, herbs, and parmesan cheese over pasta', 390.00, 'iced-coffee', false, true, 'https://images.pexels.com/photos/1435735/pexels-photo-1435735.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Truffle Mushroom Pasta', 'Elegant pasta with wild mushrooms, truffle oil, and cream sauce', 465.00, 'iced-coffee', false, true, 'https://images.pexels.com/photos/1435735/pexels-photo-1435735.jpeg?auto=compress&cs=tinysrgb&w=800')
-ON CONFLICT (name, category) DO NOTHING;
+INSERT INTO categories (id, name, icon, sort_order, active) VALUES
+  ('starter', 'Starter', '🥗', 1, true),
+  ('main-course', 'Main Course', '🍝', 2, true),
+  ('brick-oven-pizza', 'Brick Oven Pizza', '🍕', 3, true),
+  ('classic-pizza', 'Classic Pizza', '🍕', 4, true),
+  ('sodas', 'Sodas', '🥤', 5, true);
 
--- Add BRICK OVEN PIZZA items (using existing 'non-coffee' category)
+-- Add STARTER items
 INSERT INTO menu_items (name, description, base_price, category, popular, available, image_url) VALUES
-  ('Buds Quezo forever', '5 Cheese w/Walnut and Honey - our signature cheesy masterpiece', 569.00, 'non-coffee', true, true, 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Buds Yard Steak', 'Sirloin Steak w/Jalapeno on our brick oven pizza', 689.00, 'non-coffee', true, true, 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Buds Ham Pistachio', 'Ham w/Pistachio for a unique flavor combination', 549.00, 'non-coffee', false, true, 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Buds Pizza Carbonara', 'Bacon w/ egg yolk - breakfast meets pizza perfection', 499.00, 'non-coffee', true, true, 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Buds Smoked Barbeque', 'Sausage w/Mustard on our brick oven pizza', 499.00, 'non-coffee', false, true, 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Buds Tisay Pepperoni', 'Pepperoni in white sauce - a twist on the classic', 468.00, 'non-coffee', true, true, 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Buds Triple Quezo', '3 Cheese w/Honey drizzle', 399.00, 'non-coffee', false, true, 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Buds Nutella Delish', 'Nutella w/Marshmallow - the perfect dessert pizza', 329.00, 'non-coffee', true, true, 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Buds Focaccia Pizza Bread', 'Traditional Italian focaccia bread', 275.00, 'non-coffee', false, true, 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800')
-ON CONFLICT (name, category) DO NOTHING;
+  ('Caesar Salad with Anchovies', 'Fresh romaine lettuce, parmesan cheese, croutons, and traditional Caesar dressing with anchovies', 205.00, 'starter', false, true, NULL);
 
--- Add BRICK OVEN CLASSIC PIZZA items (using existing 'food' category)
+-- Add MAIN COURSE items
 INSERT INTO menu_items (name, description, base_price, category, popular, available, image_url) VALUES
-  ('Buds Pepperoni', 'Classic Pepperoni pizza made in our brick oven', 349.00, 'food', true, true, 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Buds Margherita', 'Basil and olive oil - the traditional Italian way', 349.00, 'food', true, true, 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Buds on the House', 'Bellpepper, black olives, meatballs', 389.00, 'food', false, true, 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Garlic Pesto Shrimp', 'Shrimp w/pesto and cherry tomatoes', 548.00, 'food', true, true, 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Truffle Mushroom', 'Mushrooms w/truffle paste', 489.00, 'food', false, true, 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800')
-ON CONFLICT (name, category) DO NOTHING;
+  ('Shrimp Alfredo Pasta', 'Creamy alfredo sauce with succulent shrimp over perfectly cooked pasta', 398.00, 'main-course', false, true, NULL),
+  ('Carbonara Pasta', 'Classic Italian carbonara with eggs, cheese, pancetta, and black pepper', 420.00, 'main-course', false, true, NULL),
+  ('Bolognese Pasta', 'Rich meat sauce with tomatoes, herbs, and parmesan cheese over pasta', 390.00, 'main-course', false, true, NULL),
+  ('Truffle Mushroom Pasta', 'Elegant pasta with wild mushrooms, truffle oil, and cream sauce', 465.00, 'main-course', false, true, NULL);
 
--- Add SODAS items (using new 'sodas' category)
+-- Add BRICK OVEN PIZZA items
 INSERT INTO menu_items (name, description, base_price, category, popular, available, image_url) VALUES
-  ('Coke In- Can', 'Classic Coca-Cola served in a can', 88.00, 'sodas', true, true, 'https://images.pexels.com/photos/50593/coca-cola-cold-drink-soft-drink-coke-50593.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('Sprite Lime In- Can', 'Refreshing Sprite lime soda in a can', 88.00, 'sodas', false, true, 'https://images.pexels.com/photos/50593/coca-cola-cold-drink-soft-drink-coke-50593.jpeg?auto=compress&cs=tinysrgb&w=800'),
-  
-  ('7- Up In- Can', 'Classic 7-Up lemon-lime soda in a can', 88.00, 'sodas', false, true, 'https://images.pexels.com/photos/50593/coca-cola-cold-drink-soft-drink-coke-50593.jpeg?auto=compress&cs=tinysrgb&w=800')
-ON CONFLICT (name, category) DO NOTHING;
+  ('Buds Quezo Forever', '5 Cheese w/Walnut and Honey - our signature cheesy masterpiece', 569.00, 'brick-oven-pizza', true, true, NULL),
+  ('Buds Yard Steak', 'Sirloin Steak w/Jalapeno on our brick oven pizza', 689.00, 'brick-oven-pizza', false, true, NULL),
+  ('Buds Ham Pistachio', 'Ham w/Pistachio for a unique flavor combination', 549.00, 'brick-oven-pizza', false, true, NULL),
+  ('Buds Pizza Carbonara', 'Bacon w/ egg yolk - breakfast meets pizza perfection', 499.00, 'brick-oven-pizza', false, true, NULL),
+  ('Buds Smoked Barbeque', 'Sausage w/Mustard on our brick oven pizza', 499.00, 'brick-oven-pizza', false, true, NULL),
+  ('Buds Tisay Pepperoni', 'Pepperoni in white sauce - a twist on the classic', 468.00, 'brick-oven-pizza', false, true, NULL),
+  ('Buds Triple Quezo', '3 Cheese w/Honey drizzle', 399.00, 'brick-oven-pizza', false, true, NULL),
+  ('Buds Nutella Delish', 'Nutella w/Marshmallow - the perfect dessert pizza', 329.00, 'brick-oven-pizza', false, true, NULL),
+  ('Buds Focaccia Pizza Bread', 'Traditional Italian focaccia bread', 275.00, 'brick-oven-pizza', false, true, NULL);
+
+-- Add CLASSIC PIZZA items
+INSERT INTO menu_items (name, description, base_price, category, popular, available, image_url) VALUES
+  ('Buds Pepperoni', 'Classic Pepperoni pizza made in our brick oven', 349.00, 'classic-pizza', true, true, NULL),
+  ('Buds Margherita', 'Basil and olive oil - the traditional Italian way', 349.00, 'classic-pizza', false, true, NULL),
+  ('Buds on the House', 'Bellpepper, black olives, meatballs', 389.00, 'classic-pizza', false, true, NULL),
+  ('Garlic Pesto Shrimp', 'Shrimp w/pesto and cherry tomatoes', 548.00, 'classic-pizza', false, true, NULL),
+  ('Truffle Mushroom', 'Mushrooms w/truffle paste', 489.00, 'classic-pizza', false, true, NULL);
+
+-- Add SODAS items
+INSERT INTO menu_items (name, description, base_price, category, popular, available, image_url) VALUES
+  ('Coke In-Can', 'Classic Coca-Cola served in a can', 88.00, 'sodas', false, true, NULL),
+  ('Sprite Lime In-Can', 'Refreshing Sprite lime soda in a can', 88.00, 'sodas', false, true, NULL),
+  ('7-Up In-Can', 'Classic 7-Up lemon-lime soda in a can', 88.00, 'sodas', false, true, NULL);
 
 -- Update site settings to reflect Bud's Pizzeria
 UPDATE site_settings 
@@ -341,46 +299,70 @@ SET value = 'Authentic Italian Pizza & Fresh Coffee',
     updated_at = now()
 WHERE id = 'site_description';
 
--- Add some popular items as featured
-UPDATE menu_items
-SET popular = true
-WHERE name IN (
-  'Ceasar salad with anchovies',
-  'Shrimp Alfredo Pasta',
-  'Carbonara Pasta',
-  'Buds Quezo forever',
-  'Buds Yard Steak',
-  'Buds Pizza Carbonara',
-  'Buds Tisay Pepperoni',
-  'Buds Nutella Delish',
-  'Buds Pepperoni',
-  'Buds Margherita',
-  'Garlic Pesto Shrimp',
-  'Coke In- Can'
-);
+-- Popular items will be set by admin through the admin panel
+-- No items are marked as popular by default
 
--- Fix payment methods authentication issue
--- Allow admin operations for payment methods management
+-- Fix admin authentication issues - Allow all operations for admin management
+-- This allows the admin dashboard to work without requiring Supabase authentication
 
--- Drop existing restrictive policy for payment methods
+-- Drop existing restrictive policies and create new ones that allow admin operations
 DO $$
 BEGIN
-  IF EXISTS (
-    SELECT 1 FROM pg_policies WHERE tablename = 'payment_methods' AND policyname = 'Authenticated users can manage payment methods'
-  ) THEN
+  -- Drop existing policies if they exist
+  IF EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'menu_items' AND policyname = 'Authenticated users can manage menu items') THEN
+    DROP POLICY "Authenticated users can manage menu items" ON menu_items;
+  END IF;
+  
+  IF EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'categories' AND policyname = 'Authenticated users can manage categories') THEN
+    DROP POLICY "Authenticated users can manage categories" ON categories;
+  END IF;
+  
+  IF EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'payment_methods' AND policyname = 'Authenticated users can manage payment methods') THEN
     DROP POLICY "Authenticated users can manage payment methods" ON payment_methods;
+  END IF;
+  
+  IF EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'site_settings' AND policyname = 'Authenticated users can manage site settings') THEN
+    DROP POLICY "Authenticated users can manage site settings" ON site_settings;
   END IF;
 END $$;
 
--- Create new policy that allows all operations for admin management
--- This allows the admin dashboard to work without requiring Supabase authentication
+-- Create new policies that allow all operations for admin management
 DO $$
 BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies WHERE tablename = 'payment_methods' AND policyname = 'Allow admin management of payment methods'
-  ) THEN
+  -- Menu items admin policy
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'menu_items' AND policyname = 'Allow admin management of menu items') THEN
+    CREATE POLICY "Allow admin management of menu items"
+      ON menu_items
+      FOR ALL
+      TO public
+      USING (true)
+      WITH CHECK (true);
+  END IF;
+
+  -- Categories admin policy
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'categories' AND policyname = 'Allow admin management of categories') THEN
+    CREATE POLICY "Allow admin management of categories"
+      ON categories
+      FOR ALL
+      TO public
+      USING (true)
+      WITH CHECK (true);
+  END IF;
+
+  -- Payment methods admin policy
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'payment_methods' AND policyname = 'Allow admin management of payment methods') THEN
     CREATE POLICY "Allow admin management of payment methods"
       ON payment_methods
+      FOR ALL
+      TO public
+      USING (true)
+      WITH CHECK (true);
+  END IF;
+
+  -- Site settings admin policy
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'site_settings' AND policyname = 'Allow admin management of site settings') THEN
+    CREATE POLICY "Allow admin management of site settings"
+      ON site_settings
       FOR ALL
       TO public
       USING (true)
